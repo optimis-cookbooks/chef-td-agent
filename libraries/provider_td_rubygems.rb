@@ -29,7 +29,7 @@ class Chef
 
         def initialize(new_resource, run_context = nil)
           super
-          gem_binary_path = new_resource.gem_binary.empty? ? td_gem_binary_path : new_resource.gem_binary 
+          gem_binary_path = new_resource.gem_binary.empty? ? td_gem_binary_path : new_resource.gem_binary
           @new_resource.gem_binary gem_binary_path
           @new_resource.package_name td_plugin_name if @new_resource.plugin
           @gem_env = TdGemEnvironment.new(gem_binary_path)
@@ -37,16 +37,22 @@ class Chef
         end
 
         def td_plugin_name
-          "fluent-plugin-#{@new_resource.package_name}" 
+          "fluent-plugin-#{@new_resource.package_name}"
         end
 
+        # TODO: workaround before switching back to official td-agent cookbook
+        # def td_gem_binary_path
+        #   if node['platform_family'] == "rhel" && node[:kernel][:machine] == "x86_64"
+        #     "/usr/lib64/fluent/ruby/bin/fluent-gem"
+        #   else
+        #     # Ubuntu/Debian works with /usr/lib
+        #     "/usr/lib/fluent/ruby/bin/fluent-gem"
+        #   end
+        # end
+
+        # TODO: workaround before switching back to official td-agent cookbook
         def td_gem_binary_path
-          if node['platform_family'] == "rhel" && node[:kernel][:machine] == "x86_64"
-            "/usr/lib64/fluent/ruby/bin/fluent-gem"
-          else
-            # Ubuntu/Debian works with /usr/lib
-            "/usr/lib/fluent/ruby/bin/fluent-gem"
-          end
+          '/opt/td-agent/embedded/bin/fluent-gem'
         end
       end
     end
