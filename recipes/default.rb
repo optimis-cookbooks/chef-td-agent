@@ -89,14 +89,14 @@ end
 node[:td_agent][:plugins].each do |plugin|
   if plugin.is_a?(Hash)
     plugin_name, plugin_attributes = plugin.first
-    td_agent_gem plugin_name do
+    old_td_agent_gem plugin_name do
       plugin true
       %w{action version source options gem_binary}.each do |attr|
         send(attr, plugin_attributes[attr]) if plugin_attributes[attr]
       end
     end
   elsif plugin.is_a?(String)
-    td_agent_gem plugin do
+    old_td_agent_gem plugin do
       plugin true
     end
   end
