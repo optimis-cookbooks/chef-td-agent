@@ -27,30 +27,9 @@
 </match>
 
 <match audit_log>
-  type copy
-  <store>
-    type map
-    map [["log_entries.log_entries", time, {"method"=>record["method"], "path"=>record["path"], "format"=>record["format"], "controller"=>record["controller"], "action"=>record["action"], "status"=>record["status"], "params"=>record["params"], "remote_ip"=>record["remote_ip"], "practice_id"=>record["practice_id"], "clinic_id"=>record["clinic_id"], "user_id"=>record["user_id"], "user_name"=>record["user_name"], "patient_id"=>record["patient_id"], "patient_name"=>record["patient_name"], "models"=>record["models"]}]]
-    multi true
-  </store>
-  <store>
-    type flowcounter
-    unit <%= @flowcounter_unit %>
-    count_keys *
-    tag log_entries.flow_count
-  </store>
-  <store>
-    type datacounter
-    count_interval <%= @datacounter_interval %>
-    count_key method
-    pattern1 GET ^GET$
-    pattern2 POST ^POST$
-    pattern3 PUT ^PUT$
-    pattern4 DELETE ^DELETE$
-    outcast_unmatched yes
-    output_messages yes
-    tag log_entries.method_count
-  </store>
+  type map
+  map [["log_entries.log_entries", time, {"method"=>record["method"], "path"=>record["path"], "format"=>record["format"], "controller"=>record["controller"], "action"=>record["action"], "status"=>record["status"], "params"=>record["params"], "remote_ip"=>record["remote_ip"], "practice_id"=>record["practice_id"], "clinic_id"=>record["clinic_id"], "user_id"=>record["user_id"], "user_name"=>record["user_name"], "patient_id"=>record["patient_id"], "patient_name"=>record["patient_name"], "models"=>record["models"]}]]
+  multi true
 </match>
 
 <match log_entries.raw_data>
@@ -74,6 +53,7 @@
     remove_tag_prefix log_entries.
     capped
     capped_size 2048m
+    include_time_key true
   </store>
 </match>
 
@@ -88,4 +68,5 @@
   buffer_path /var/log/td-agent/buffer/mongo.*.buffer
   flush_at_shutdown true
   buffer_queue_limit 1024
+  include_time_key true
 </match>
