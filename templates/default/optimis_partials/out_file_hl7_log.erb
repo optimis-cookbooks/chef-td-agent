@@ -1,6 +1,6 @@
 <match OptimisPt.Hl7>
   type file
-  path <%= @path || "/var/log/td-agent/hl7_production.log" %>
+  path <%= "/var/log/td-agent/hl7_#{node.chef_environment}.log" %>
   utc
   compress gzip
   buffer_chunk_limit 2048m

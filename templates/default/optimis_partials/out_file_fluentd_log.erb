@@ -1,6 +1,6 @@
 <match fluent.*>
   type file
-  path <%= @path || "/var/log/td-agent/fluentd.log" %>
+  path /var/log/td-agent/fluentd.log
   utc
   compress gzip
   buffer_chunk_limit 2048m

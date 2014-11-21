@@ -1,7 +1,7 @@
 <% @tag ||= "OptimisPt.Rails" -%>
 <% @host ||= "AuditLogDB.internal" -%>
 <% @port ||= "27017" -%>
-<% @database ||= "optimis_prism_production" -%>
+<% @database ||= "optimis_prism_#{node.chef_environment}" -%>
 <% @flowcounter_unit ||= "minute" -%>
 <% @datacounter_interval ||= "600" -%>
 
