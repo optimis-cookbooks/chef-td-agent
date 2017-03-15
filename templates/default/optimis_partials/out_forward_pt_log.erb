@@ -25,4 +25,59 @@
       buffer_chunk_limit 1024m
     </secondary>
   </store>
+  <store>
+    type rewrite_tag_filter
+    rewriterule1 path ^\/keep_alive clear
+    rewriterule2 user_id .+ Optimis.Rails.BigQuery
+    rewriterule3 path .+ clear
+  </store>
+
 </match>
+<filter Optimis.Rails.BigQuery>
+  @type record_modifier
+
+  whitelist_keys method, path, controller, action, status, time, practice_id, clinic_id, user_id, patient_id, jsonized_record
+  <record>
+    jsonized_record ${record.to_json}
+  </record>
+</filter>
+
+# forwarding to bigquery plugin
+<match Optimis.Rails.BigQuery>
+  @type bigquery
+  method load
+
+  buffer_type file
+  buffer_path /var/log/td-agent/optimis.*.buffer
+  flush_interval 1m
+  flush_at_shutdown true
+
+  auth_method json_key
+  json_key /var/www/optimis/config/bigquery_keyfile.json
+
+  project "rapid-compound-160705"
+  dataset <%= "optimis_#{@env}" %>
+
+  auto_create_table true
+  tables log_entries_%Y%m%d_%H
+
+  schema [
+  {"name": "method", "type": "STRING"},
+  {"name": "path", "type": "STRING"},
+  {"name": "controller", "type": "STRING"},
+  {"name": "action", "type": "STRING"},
+  {"name": "status", "type": "INTEGER"},
+  {"name": "time", "type": "TIMESTAMP"},
+  {"name": "practice_id", "type": "INTEGER"},
+  {"name": "clinic_id", "type": "INTEGER"},
+  {"name": "user_id", "type": "STRING"},
+  {"name": "patient_id", "type": "STRING"},
+  {"name": "jsonized_record", "type": "STRING"}
+  ]
+
+  time_format %FT%T%:z
+  time_field time
+
+</match>
+
+
