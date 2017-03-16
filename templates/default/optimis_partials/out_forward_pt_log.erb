@@ -58,9 +58,12 @@
   project "rapid-compound-160705"
   dataset <%= "optimis_#{@env}" %>
 
-  auto_create_table true
   utc
-  tables log_entries_%Y%m%d_%H
+  time_slice_format %Y%m%d_%H
+  time_slice_wait 10m
+
+  auto_create_table true
+  tables log_entries_%{time_slice}
 
   schema [
   {"name": "method", "type": "STRING"},
