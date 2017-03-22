@@ -55,7 +55,7 @@
   auth_method json_key
   json_key /var/www/optimis/config/bigquery_keyfile.json
 
-  project "rapid-compound-160705"
+  project <%= "#{@project_id}" %>
   dataset <%= "optimis_#{@env}" %>
 
   utc
