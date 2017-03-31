@@ -59,25 +59,10 @@
   dataset <%= "optimis_#{@env}" %>
 
   utc
-  time_slice_format %Y%m%d_%H
+  time_slice_format %Y%m%d
   time_slice_wait 10m
 
-  auto_create_table true
-  tables log_entries_%{time_slice}
-
-  schema [
-  {"name": "method", "type": "STRING"},
-  {"name": "path", "type": "STRING"},
-  {"name": "controller", "type": "STRING"},
-  {"name": "action", "type": "STRING"},
-  {"name": "status", "type": "INTEGER"},
-  {"name": "time", "type": "TIMESTAMP"},
-  {"name": "practice_id", "type": "INTEGER"},
-  {"name": "clinic_id", "type": "INTEGER"},
-  {"name": "user_id", "type": "INTEGER"},
-  {"name": "patient_id", "type": "INTEGER"},
-  {"name": "jsonized_record", "type": "STRING"}
-  ]
+  table log_entries$%{time_slice}
 
   time_format %FT%T%:z
   time_field time
