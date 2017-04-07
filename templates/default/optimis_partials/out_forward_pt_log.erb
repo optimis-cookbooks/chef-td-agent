@@ -55,8 +55,8 @@
   auth_method json_key
   json_key /var/www/optimis/config/bigquery_keyfile.json
 
-  project <%= "#{@project_id}" %>
-  dataset <%= "optimis_#{@env}" %>
+  project bigquery-161901
+  dataset <%= "optimis_#{node.chef_environment}" %>
 
   utc
   time_slice_format %Y%m%d
